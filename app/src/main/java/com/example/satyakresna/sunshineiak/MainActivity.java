@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         getDataFromAPI("-8.5752", "115.1777", "10", "metric");
     }
 
+    //finally did it dude
     private void getDataFromAPI(String lat, String lon, String cnt, String units){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = Constant.URL_API + Constant.PARAM_DAILY +
