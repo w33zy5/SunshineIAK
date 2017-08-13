@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Sunshine IAK</string>
+    <string name="day">Sunday</string>
+    <string name="weather">Sunny</string>
+    <string name="max_temp">19\u00b0</string>
+    <string name="min_temp">15\u00b0</string>
+    <string name="weather_detail">Today is sunny</string>
+    <string name="humidity_label">Humidity</string>
+    <string name="humidity_value">84%</string>
+    <string name="pressure_label">Pressure</string>
+    <string name="pressure_value">970 hPa</string>
+    <string name="wind_label">Wind</string>
+    <string name="wind_value">1 m/sec</string>
+    <string name="today">Today</string>
+</resources>
