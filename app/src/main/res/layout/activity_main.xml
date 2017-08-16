@@ -11,4 +11,5 @@
         android:id="@+id/rv_forecast"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <include layout="@layout/network_retry"/>
 </RelativeLayout>

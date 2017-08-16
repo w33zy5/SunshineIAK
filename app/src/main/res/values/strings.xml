@@ -12,4 +12,5 @@
     <string name="wind_label">Wind</string>
     <string name="wind_value">1 m/sec</string>
     <string name="today">Today</string>
+    <string name="error_message">Unable to connect. Please check internet connection</string>
 </resources>

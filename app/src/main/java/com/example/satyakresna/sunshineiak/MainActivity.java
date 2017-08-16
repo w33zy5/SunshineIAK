@@ -1,6 +1,9 @@
 package com.example.satyakresna.sunshineiak;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +11,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,6 +44,9 @@ implements forecastAdapter.ItemClickListener{
     private forecastAdapter mAdapter;
     private Gson gson = new Gson();
     private DividerItemDecoration mDividerItemDecoration;
+    @BindView(R.id.line_network_retry) LinearLayout mLinearLayoutRetry;
+    @BindView(R.id.tv_error_message) TextView mDisplayErrorMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +60,19 @@ implements forecastAdapter.ItemClickListener{
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
-        ActionBar toolbar = getSupportActionBar();
+        if(isNetworkConnected() || isWifiConnected()){
+            getDataFromAPI("-8.5752", "115.1777", "10", "metric");
+        } else {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            mLinearLayoutRetry.setVisibility(View.VISIBLE);
+        }
 
-        getDataFromAPI("-8.5752", "115.1777", "10", "metric");
+        ActionBar toolbar = getSupportActionBar();
+        if(toolbar != null){
+            toolbar.setElevation(0);
+        }
+
+
     }
 
     //finally did it dude
@@ -99,5 +119,19 @@ implements forecastAdapter.ItemClickListener{
         startDetailActivity.putExtra("data", gson.toJson(data));
         startDetailActivity.putExtra("position", position);
         startActivity(startDetailActivity);
+    }
+
+    private boolean isNetworkConnected(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private boolean isWifiConnected(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() && (ConnectivityManager.TYPE_WIFI == networkInfo.getType());
     }
 }
