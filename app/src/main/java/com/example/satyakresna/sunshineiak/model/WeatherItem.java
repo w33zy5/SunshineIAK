@@ -80,4 +80,16 @@ public class WeatherItem {
         DateFormat dateFormat = new SimpleDateFormat("MMM dd");
         return "Today, "+dateFormat.format(date);
     }
+
+    public String getReadableHumidity(){
+        return humidity + "%";
+    }
+
+    public String getReadableWindSpeed(){
+        return Math.round(speed) + " m/sec";
+    }
+
+    public String getReadablePressure(){
+        return Math.round(pressure) + " hPa";
+    }
 }
