@@ -28,13 +28,19 @@ import static com.example.satyakresna.sunshineiak.R.string.weather;
 
 public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = forecastAdapter.class.getSimpleName();
+    private final ItemClickListener mOnClickListener;
     private List<WeatherItem> weatherItemList = new ArrayList<>();
 
     private static final int VIEW_TODAY = 0;
     private static final int VIEW_OTHER = 1;
 
-    public forecastAdapter(List<WeatherItem> weatherItemList){
+    public interface ItemClickListener{
+        void onItemClick(WeatherItem data, int position);
+    }
+    
+    public forecastAdapter(List<WeatherItem> weatherItemList, ItemClickListener mOnClickListener){
         this.weatherItemList = weatherItemList;
+        this.mOnClickListener = mOnClickListener;
     }
 
     @Override
@@ -63,9 +69,9 @@ public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(getItemViewType(position) == VIEW_TODAY){
-            ((TodayViewHolder) holder).bind(weatherItemList.get(position));
+            ((TodayViewHolder) holder).bind(weatherItemList.get(position), mOnClickListener);
         } else{
-            ((ForecastViewHolder) holder).bind(weatherItemList.get(position), position);
+            ((ForecastViewHolder) holder).bind(weatherItemList.get(position), position,mOnClickListener);
         }
 
     }
@@ -108,7 +114,7 @@ public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             maxTemp = (TextView) itemView.findViewById(R.id.tv_max_temp);*/
         }
 
-        public void bind(WeatherItem data, final int position){
+        public void bind(final WeatherItem data, final int position, final ItemClickListener itemClickListener){
             weatherIcon.setImageResource(
                     SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(
                             data.getWeather().get(0).getId()
@@ -118,6 +124,12 @@ public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             weather.setText(data.getWeather().get(0).getDescription());
             minTemp.setText(data.getTemp().getResolvedTemp(data.getTemp().getMin()));
             maxTemp.setText(data.getTemp().getResolvedTemp(data.getTemp().getMax()));
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    itemClickListener.onItemClick(data, position);
+                }
+            });
         }
     }
 
@@ -133,7 +145,7 @@ public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(WeatherItem data){
+        public void bind(final WeatherItem data, final ItemClickListener itemClickListener){
             weatherIconToday.setImageResource(
                     SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(
                             data.getWeather().get(0).getId()
@@ -143,6 +155,12 @@ public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             weatherToday.setText(data.getWeather().get(0).getDescription());
             minTempToday.setText(data.getTemp().getResolvedTemp(data.getTemp().getMin()));
             maxTempToday.setText(data.getTemp().getResolvedTemp(data.getTemp().getMax()));
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    itemClickListener.onItemClick(data, 0);
+                }
+            });
         }
     }
 }
