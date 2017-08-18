@@ -106,15 +106,28 @@ implements forecastAdapter.ItemClickListener{
                 new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error){
-                        if(error != null){
-                            Log.e(TAG, error.getMessage());
+                        if(dbHelper.isDataAlreadyExist(cityTarget)){
+                            dailyForecast = dbHelper.getSavedForecast(cityTarget);
+                            showDataFromDB(dailyForecast);
                         } else{
-                            Log.e(TAG, "Something error happened!");
+                            if(error != null){
+                                Log.e(TAG, error.getMessage());
+                            } else{
+                                Log.e(TAG, "something error happened!");
+                            }
                         }
                     }
                 }
         );
         requestQueue.add(stringRequest);
+    }
+
+    private void showDataFromDB(DailyForecast dailyForecast){
+        weatherItemList.clear();
+        for(WeatherItem item : dailyForecast.getList()){
+            weatherItemList.add(item);
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     private void saveForecastToDB(DailyForecast dailyForecast){
