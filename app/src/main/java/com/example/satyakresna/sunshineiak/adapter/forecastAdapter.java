@@ -46,23 +46,9 @@ public class forecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
        if(viewType == VIEW_TODAY){
-           Context context = parent.getContext();
-           int layoutFromListItem = R.layout.row_today_forecast;
-           LayoutInflater inflater = LayoutInflater.from(context);
-           boolean shouldAttachToParentImmediately = false;
-
-           View view = inflater.inflate(layoutFromListItem, parent, shouldAttachToParentImmediately);
-           TodayViewHolder viewHolder = new TodayViewHolder(view);
-           return viewHolder;
+           return new TodayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_today_forecast, parent, false));
        } else{
-           Context context = parent.getContext();
-           int layoutFromListItem = R.layout.row_forecast_item;
-           LayoutInflater inflater = LayoutInflater.from(context);
-           boolean shouldAttachToParentImmediately = false;
-
-           View view = inflater.inflate(layoutFromListItem, parent, shouldAttachToParentImmediately);
-           ForecastViewHolder viewHolder = new ForecastViewHolder(view);
-           return viewHolder;
+           return new ForecastViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_forecast_item, parent, false));
        }
     }
 
