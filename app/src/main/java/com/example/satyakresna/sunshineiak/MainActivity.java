@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.satyakresna.sunshineiak.adapter.forecastAdapter;
+import com.example.satyakresna.sunshineiak.database.ForecastDBHelper;
 import com.example.satyakresna.sunshineiak.model.DailyForecast;
 import com.example.satyakresna.sunshineiak.model.DummyForecast;
 import com.example.satyakresna.sunshineiak.model.WeatherItem;
@@ -72,6 +73,8 @@ implements forecastAdapter.ItemClickListener{
             toolbar.setElevation(0);
         }
 
+        dbHelper = new ForecastDBHelper(this);
+
 
     }
 
@@ -81,7 +84,7 @@ implements forecastAdapter.ItemClickListener{
         String url = Constant.URL_API + Constant.PARAM_DAILY +
                 Constant.PARAM_LAT + lat + "&" + Constant.PARAM_LON + lon + "&" +
                 Constant.PARAM_CNT + cnt + "&" + Constant.PARAM_UNIT + units + "&" +
-                Constant.PARAM_API_KEY + Constant.API_KEY;
+                Constant.PARAM_API_KEY + Constant.API_KEY + "&q=" + cityTarget;
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
                 url,
@@ -93,6 +96,7 @@ implements forecastAdapter.ItemClickListener{
                             for(WeatherItem item : dailyForecast.getList()){
                                 weatherItemList.add(item);
                             }
+                            saveForecastToDB(dailyForecast);
                             mAdapter.notifyDataSetChanged();
                         } catch (Exception e){
                             Log.e(TAG, e.getMessage());
@@ -111,6 +115,17 @@ implements forecastAdapter.ItemClickListener{
                 }
         );
         requestQueue.add(stringRequest);
+    }
+
+    private void saveForecastToDB(DailyForecast dailyForecast){
+        if(dbHelper.isDataAlreadyExist(cityTarget)){
+            //Delete data First
+            dbHelper.deleteForUpdate(cityTarget);
+        }
+
+        for(WeatherItem item : dailyForecast.getList()){
+            dbHelper.saveForecast(dailyForecast.getCity, item);
+        }
     }
 
     @Override
