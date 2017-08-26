@@ -47,6 +47,9 @@ implements forecastAdapter.ItemClickListener{
     private DividerItemDecoration mDividerItemDecoration;
     @BindView(R.id.line_network_retry) LinearLayout mLinearLayoutRetry;
     @BindView(R.id.tv_error_message) TextView mDisplayErrorMessage;
+    private ForecastDBHelper dbHelper;
+    private static final String cityTarget = "Badung";
+    private DailyForecast dailyForecast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,6 @@ implements forecastAdapter.ItemClickListener{
         }
 
         dbHelper = new ForecastDBHelper(this);
-
 
     }
 
@@ -137,7 +139,7 @@ implements forecastAdapter.ItemClickListener{
         }
 
         for(WeatherItem item : dailyForecast.getList()){
-            dbHelper.saveForecast(dailyForecast.getCity, item);
+            dbHelper.saveForecast(dailyForecast.getCity(), item);
         }
     }
 
