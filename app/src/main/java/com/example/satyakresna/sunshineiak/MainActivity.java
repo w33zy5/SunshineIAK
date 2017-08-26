@@ -48,7 +48,7 @@ implements forecastAdapter.ItemClickListener{
     @BindView(R.id.line_network_retry) LinearLayout mLinearLayoutRetry;
     @BindView(R.id.tv_error_message) TextView mDisplayErrorMessage;
     private ForecastDBHelper dbHelper;
-    private static final String cityTarget = "Badung";
+    private static final String cityTarget = "Banjar Pekenjelodan";
     private DailyForecast dailyForecast;
 
     @Override
