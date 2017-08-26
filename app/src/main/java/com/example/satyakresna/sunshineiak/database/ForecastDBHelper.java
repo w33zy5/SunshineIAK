@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.satyakresna.sunshineiak.model.City;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by Dewa Agung on 18/08/17.
  */
 
-public class ForecastDBHelper {
+public class ForecastDBHelper extends SQLiteOpenHelper{
 
     private static final String TAG = ForecastDBHelper.class.getSimpleName();
     private static final String DB_NAME = "sunshine.db";
@@ -108,8 +109,15 @@ public class ForecastDBHelper {
                     //Create Temp Object
                     Temp temp = new Temp();
 
+                    //Create WeatherItem object, which will be used to store list data of forecast
+                    WeatherItem item = new WeatherItem();
+                    //Set weather to weatheritem
+                    item.setWeather(weatherList);
+                    //set temp to weatherItem
+                    item.setTemp(temp);
+
                     //Getting all data from cursor and set it to WeatherItem
-                    item.setDt(get.Int(cursor.getColumnIndex(ForecastContract.ForecastEntry.COLUMN_EPOCH_TIME)));
+                    item.setDt(cursor.getInt(cursor.getColumnIndex(ForecastContract.ForecastEntry.COLUMN_EPOCH_TIME)));
                     item.getWeather().get(0).setId(cursor.getInt(cursor.getColumnIndex(ForecastContract.ForecastEntry.COLUMN_WEATHER_ID)));
                     item.getWeather().get(0).setDescription(cursor.getString(cursor.getColumnIndex(ForecastContract.ForecastEntry.COLUMN_WEATHER_DESC)));
                     item.getTemp().setMax(cursor.getDouble(cursor.getColumnIndex(ForecastContract.ForecastEntry.COLUMN_MAX_TEMP)));
